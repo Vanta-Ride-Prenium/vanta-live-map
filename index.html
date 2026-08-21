@@ -3,65 +3,1042 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>VANTA — Live Map</title>
+<title>VANTA — Premium Sydney Ride</title>
+
 <style>
-*{box-sizing:border-box}body{margin:0;background:#060707;color:#f7f4eb;font-family:-apple-system,BlinkMacSystemFont,"Inter",Arial,sans-serif}
-.app{min-height:100vh;background:#080909}.top{height:64px;border-bottom:1px solid #292a27;display:flex;align-items:center;justify-content:space-between;padding:0 22px;background:#090a0a}.brand{color:#e8bd59;font-family:Georgia,serif;font-size:25px;letter-spacing:3px}.sub{font-family:Arial;font-size:8px;letter-spacing:2px;color:#aaa;margin-left:4px}.nav{display:flex;gap:22px;font-size:11px;color:#999}.nav b{color:#fff}.user{border:1px solid #34352f;border-radius:20px;padding:8px 12px;font-size:10px}
-.layout{display:grid;grid-template-columns:355px 1fr;min-height:calc(100vh - 64px)}.left{padding:18px;border-right:1px solid #292a27;background:#0a0b0b}.eyebrow{font-size:9px;letter-spacing:2px;color:#d8ad4a}.title{font-size:23px;margin:6px 0}.muted{color:#888b85;font-size:10px;line-height:1.5}
-.tabs{display:grid;grid-template-columns:repeat(3,1fr);margin:16px 0 12px;border:1px solid #2c2e2a;border-radius:9px;overflow:hidden}.tabs button{border:0;border-right:1px solid #2c2e2a;background:#101212;color:#999;padding:9px;font-size:10px}.tabs button.active{background:#2a2213;color:#f3cc70}
-.field{border:1px solid #2c2e2a;background:#101212;border-radius:10px;padding:10px 12px;margin:8px 0}.field label{display:block;color:#777b75;text-transform:uppercase;letter-spacing:1.3px;font-size:8px}.field div{font-size:12px;margin-top:5px}.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#f1c75d;margin-right:8px}.red{background:#ef6d68}.gold{color:#f1c75d}.search{width:100%;border:0;border-radius:10px;background:linear-gradient(#f1cc6b,#c99c39);font-weight:800;padding:13px;margin-top:8px}
-.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.stat{border:1px solid #2c2e2a;background:#0e1010;border-radius:10px;padding:10px}.stat b{font-size:14px}.stat span{display:block;color:#777b75;font-size:8px;margin-top:4px}
-.vehicle{margin-top:14px}.vehicle h3{font-size:12px;margin:0 0 8px}.v{display:grid;grid-template-columns:55px 1fr auto;gap:9px;align-items:center;border:1px solid #2b2d29;background:#101212;border-radius:10px;padding:8px;margin-bottom:7px}.v.selected{border-color:#d8ad4a;background:#17140d}.vpic{height:40px;border-radius:7px;background:linear-gradient(145deg,#272b2c,#0a0c0c);display:flex;align-items:center;justify-content:center;font-size:20px}.v b{font-size:10px}.v small{display:block;color:#777b75;font-size:8px;margin-top:2px}.price{color:#f1c75d;font-weight:800;font-size:12px}
-.mapwrap{position:relative;overflow:hidden;background:#111}.map{position:absolute;inset:0}.map iframe{width:100%;height:100%;border:0;display:block;filter:brightness(.58) saturate(.65) contrast(1.1)}
-.overlay{position:absolute;z-index:10;pointer-events:none}.live{top:16px;left:16px;display:flex;gap:8px}.badge{background:rgba(7,8,8,.93);border:1px solid #383a34;border-radius:10px;padding:10px 13px;font-size:11px;box-shadow:0 5px 20px #0008}.green{color:#52d58a}.green:before{content:"●";margin-right:6px}
-.controls{right:16px;top:16px;display:grid;gap:7px;pointer-events:auto}.controls button{width:40px;height:40px;border:1px solid #3a3b35;border-radius:10px;background:#090a0add;color:#fff;font-size:18px}
-.marker{width:44px;height:44px;border-radius:50%;border:2px solid #111;background:#d8ad4a;color:#111;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 0 7px #d8ad4a28;position:absolute;transform:translate(-50%,-50%);z-index:8}.marker.red{background:#ef6d68;box-shadow:0 0 0 7px #ef6d6828}.marker.you{background:#f5cf70;box-shadow:0 0 0 9px #f5cf7030}.driverlabel{position:absolute;z-index:9;background:#090a0ae8;border:1px solid #3b3b35;border-radius:8px;padding:6px 8px;font-size:9px;white-space:nowrap;transform:translate(15px,-50%)}.driverlabel b{color:#f1c75d}
-.route{position:absolute;height:5px;background:#d8ad4a;box-shadow:0 0 10px #d8ad4a99;border-radius:5px;z-index:6;transform-origin:left center}
-.bottom{left:16px;right:16px;bottom:16px;display:flex;justify-content:space-between;align-items:end}.status{background:#090a0ae8;border:1px solid #383a34;border-radius:10px;padding:9px 12px;font-size:10px}.drivers{display:flex;gap:6px}.drivers span{background:#090a0ae8;border:1px solid #383a34;border-radius:9px;padding:8px;font-size:9px}.drivers i{display:inline-block;width:6px;height:6px;background:#52d58a;border-radius:50%;margin-right:4px}
-@media(max-width:850px){.top{padding:0 14px}.nav{display:none}.layout{display:block}.left{border:0;padding:13px}.mapwrap{height:620px;border-top:1px solid #292a27}.vehicle{display:none}.stats{display:none}.title{font-size:20px}.field{display:inline-block;width:49%;vertical-align:top}.search{margin-top:2px}.bottom .drivers{display:none}}
-@media(max-width:520px){.left{padding:10px}.field{width:100%}.mapwrap{height:610px}.brand{font-size:21px}.sub{display:none}}
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#050606;
+  color:#f7f4eb;
+  font-family:-apple-system,BlinkMacSystemFont,"Inter",Arial,sans-serif
+}
+
+button{
+  font-family:inherit;
+  cursor:pointer
+}
+
+/* =========================
+   APP
+========================= */
+
+.app{
+  width:100%;
+  height:100vh;
+  background:#070808;
+  position:relative;
+  overflow:hidden
+}
+
+/* =========================
+   TOP NAV
+========================= */
+
+.top{
+  position:absolute;
+  z-index:100;
+  top:0;
+  left:0;
+  right:0;
+  height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  background:linear-gradient(
+    to bottom,
+    rgba(5,6,6,.96),
+    rgba(5,6,6,.72),
+    transparent
+  );
+  pointer-events:none
+}
+
+.top>*{
+  pointer-events:auto
+}
+
+.brand{
+  color:#e8bd59;
+  font-family:Georgia,serif;
+  font-size:25px;
+  letter-spacing:4px
+}
+
+.sub{
+  font-size:8px;
+  letter-spacing:2px;
+  color:#a7a79f;
+  margin-left:7px
+}
+
+.nav{
+  display:flex;
+  gap:25px;
+  font-size:10px;
+  color:#9b9c96
+}
+
+.nav b{
+  color:#f5d47b
+}
+
+.user{
+  border:1px solid #3a3b35;
+  border-radius:22px;
+  padding:9px 13px;
+  font-size:10px;
+  background:rgba(8,9,9,.75);
+  backdrop-filter:blur(15px)
+}
+
+/* =========================
+   FULL MAP
+========================= */
+
+.mapwrap{
+  position:absolute;
+  inset:0;
+  overflow:hidden;
+  background:#111
+}
+
+.map{
+  position:absolute;
+  inset:0
+}
+
+.map iframe{
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  filter:brightness(.55) saturate(.55) contrast(1.15)
+}
+
+/* =========================
+   MAP DARK VIGNETTE
+========================= */
+
+.mapwrap:after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:4;
+  pointer-events:none;
+  background:
+    radial-gradient(
+      ellipse at center,
+      transparent 35%,
+      rgba(0,0,0,.12) 65%,
+      rgba(0,0,0,.58) 100%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(0,0,0,.25),
+      transparent 25%,
+      transparent 65%,
+      rgba(0,0,0,.42)
+    )
+}
+
+/* =========================
+   BOOKING PANEL
+========================= */
+
+.booking{
+  position:absolute;
+  z-index:30;
+  top:88px;
+  left:28px;
+  width:365px;
+  padding:20px;
+  border:1px solid rgba(216,173,74,.28);
+  border-radius:20px;
+  background:rgba(8,9,9,.90);
+  backdrop-filter:blur(24px);
+  -webkit-backdrop-filter:blur(24px);
+  box-shadow:
+    0 25px 70px rgba(0,0,0,.55),
+    inset 0 1px rgba(255,255,255,.04)
+}
+
+.eyebrow{
+  font-size:9px;
+  letter-spacing:2.5px;
+  color:#d8ad4a
+}
+
+.title{
+  font-family:Georgia,serif;
+  font-size:26px;
+  line-height:1.15;
+  margin:7px 0
+}
+
+.muted{
+  color:#888b85;
+  font-size:10px;
+  line-height:1.55;
+  margin-bottom:15px
+}
+
+/* =========================
+   TABS
+========================= */
+
+.tabs{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  border:1px solid #30322d;
+  border-radius:10px;
+  overflow:hidden;
+  margin-bottom:12px
+}
+
+.tabs button{
+  border:0;
+  border-right:1px solid #30322d;
+  background:#101212;
+  color:#888b85;
+  padding:10px 5px;
+  font-size:9px
+}
+
+.tabs button:last-child{
+  border-right:0
+}
+
+.tabs button.active{
+  background:#292113;
+  color:#f2cb70
+}
+
+/* =========================
+   FIELDS
+========================= */
+
+.field{
+  border:1px solid #30322d;
+  background:rgba(16,18,18,.9);
+  border-radius:11px;
+  padding:11px 13px;
+  margin:8px 0
+}
+
+.field label{
+  display:block;
+  color:#73766f;
+  text-transform:uppercase;
+  letter-spacing:1.4px;
+  font-size:7px
+}
+
+.field div{
+  font-size:12px;
+  margin-top:5px
+}
+
+.dot{
+  display:inline-block;
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#f1c75d;
+  margin-right:8px;
+  box-shadow:0 0 10px #f1c75d55
+}
+
+.dot.red{
+  background:#ef6d68;
+  box-shadow:0 0 10px #ef6d6855
+}
+
+/* =========================
+   SEARCH BUTTON
+========================= */
+
+.search{
+  width:100%;
+  border:0;
+  border-radius:11px;
+  background:linear-gradient(135deg,#f2d27b,#c89b39);
+  color:#15120a;
+  font-weight:900;
+  padding:14px;
+  margin-top:9px;
+  letter-spacing:.2px;
+  box-shadow:0 10px 25px rgba(214,172,70,.18);
+  transition:.2s
+}
+
+.search:active{
+  transform:scale(.98)
+}
+
+/* =========================
+   STATS
+========================= */
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:10px
+}
+
+.stat{
+  border:1px solid #2d2f2b;
+  background:rgba(13,15,15,.75);
+  border-radius:10px;
+  padding:9px
+}
+
+.stat b{
+  font-size:13px
+}
+
+.stat span{
+  display:block;
+  color:#777b75;
+  font-size:7px;
+  margin-top:3px;
+  letter-spacing:.5px
+}
+
+/* =========================
+   LIVE BADGE
+========================= */
+
+.live{
+  position:absolute;
+  z-index:20;
+  top:88px;
+  right:28px;
+  display:flex;
+  gap:8px
+}
+
+.badge{
+  background:rgba(7,8,8,.86);
+  border:1px solid #383a34;
+  border-radius:11px;
+  padding:10px 13px;
+  font-size:10px;
+  box-shadow:0 8px 25px rgba(0,0,0,.3);
+  backdrop-filter:blur(14px)
+}
+
+.green{
+  color:#52d58a
+}
+
+.green:before{
+  content:"●";
+  margin-right:6px
+}
+
+/* =========================
+   MAP CONTROLS
+========================= */
+
+.controls{
+  position:absolute;
+  z-index:20;
+  right:28px;
+  top:150px;
+  display:grid;
+  gap:7px
+}
+
+.controls button{
+  width:42px;
+  height:42px;
+  border:1px solid #3b3d37;
+  border-radius:11px;
+  background:rgba(8,9,9,.82);
+  color:#fff;
+  font-size:18px;
+  backdrop-filter:blur(14px)
+}
+
+/* =========================
+   DRIVER MARKERS
+========================= */
+
+.marker{
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  border:2px solid #111;
+  background:#d8ad4a;
+  color:#111;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:19px;
+  box-shadow:
+    0 0 0 7px rgba(216,173,74,.16),
+    0 8px 20px rgba(0,0,0,.4);
+  position:absolute;
+  transform:translate(-50%,-50%);
+  z-index:8;
+  animation:pulse 3s infinite
+}
+
+.marker.red{
+  background:#ef6d68;
+  box-shadow:0 0 0 7px rgba(239,109,104,.16)
+}
+
+.marker.you{
+  background:#f5cf70;
+  box-shadow:0 0 0 9px rgba(245,207,112,.18);
+  animation:pulseYou 2.5s infinite
+}
+
+@keyframes pulse{
+  0%,100%{box-shadow:0 0 0 7px rgba(216,173,74,.15),0 8px 20px rgba(0,0,0,.4)}
+  50%{box-shadow:0 0 0 13px rgba(216,173,74,.04),0 8px 20px rgba(0,0,0,.4)}
+}
+
+@keyframes pulseYou{
+  0%,100%{box-shadow:0 0 0 9px rgba(245,207,112,.18)}
+  50%{box-shadow:0 0 0 17px rgba(245,207,112,.02)}
+}
+
+.driverlabel{
+  position:absolute;
+  z-index:9;
+  background:rgba(9,10,10,.90);
+  border:1px solid #3b3b35;
+  border-radius:8px;
+  padding:6px 8px;
+  font-size:8px;
+  white-space:nowrap;
+  transform:translate(15px,-50%);
+  backdrop-filter:blur(10px)
+}
+
+.driverlabel b{
+  color:#f1c75d
+}
+
+/* =========================
+   ROUTE
+========================= */
+
+.route{
+  position:absolute;
+  height:5px;
+  background:#d8ad4a;
+  box-shadow:
+    0 0 8px #d8ad4a,
+    0 0 18px rgba(216,173,74,.55);
+  border-radius:5px;
+  z-index:6;
+  transform-origin:left center
+}
+
+/* =========================
+   VEHICLE BAR
+========================= */
+
+.vehiclebar{
+  position:absolute;
+  z-index:25;
+  left:28px;
+  right:28px;
+  bottom:25px;
+  display:flex;
+  gap:9px;
+  padding:9px;
+  border:1px solid rgba(216,173,74,.24);
+  border-radius:17px;
+  background:rgba(7,8,8,.91);
+  backdrop-filter:blur(22px);
+  box-shadow:0 20px 50px rgba(0,0,0,.45)
+}
+
+.vehicle{
+  flex:1;
+  min-width:0;
+  display:grid;
+  grid-template-columns:46px 1fr auto;
+  gap:9px;
+  align-items:center;
+  border:1px solid #2d302c;
+  background:#101212;
+  border-radius:11px;
+  padding:8px;
+  transition:.2s
+}
+
+.vehicle.selected{
+  border-color:#d8ad4a;
+  background:#19150d
+}
+
+.vehicle:hover{
+  border-color:#8f7434
+}
+
+.vpic{
+  height:39px;
+  border-radius:8px;
+  background:linear-gradient(145deg,#292d2e,#090b0b);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px
+}
+
+.vehicle b{
+  display:block;
+  font-size:9px
+}
+
+.vehicle small{
+  display:block;
+  color:#777b75;
+  font-size:7px;
+  margin-top:3px
+}
+
+.price{
+  color:#f1c75d;
+  font-weight:900;
+  font-size:12px
+}
+
+/* =========================
+   STATUS
+========================= */
+
+.status{
+  position:absolute;
+  z-index:21;
+  left:30px;
+  bottom:125px;
+  background:rgba(8,9,9,.88);
+  border:1px solid #383a34;
+  border-radius:10px;
+  padding:9px 12px;
+  font-size:9px;
+  backdrop-filter:blur(12px)
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+.mobile-book{
+  display:none
+}
+
+@media(max-width:850px){
+
+  html,body{
+    overflow:hidden
+  }
+
+  .top{
+    height:62px;
+    padding:0 15px
+  }
+
+  .brand{
+    font-size:22px
+  }
+
+  .sub{
+    display:none
+  }
+
+  .nav{
+    display:none
+  }
+
+  .user{
+    padding:8px 10px
+  }
+
+  .booking{
+    top:auto;
+    left:10px;
+    right:10px;
+    bottom:10px;
+    width:auto;
+    padding:14px;
+    border-radius:20px;
+    background:rgba(8,9,9,.94);
+    max-height:58vh;
+    overflow:auto
+  }
+
+  .booking .eyebrow{
+    font-size:8px
+  }
+
+  .booking .title{
+    font-size:20px;
+    margin:4px 0
+  }
+
+  .booking .muted{
+    display:none
+  }
+
+  .tabs{
+    margin:9px 0
+  }
+
+  .field{
+    display:inline-block;
+    width:49%;
+    vertical-align:top;
+    margin:4px 0
+  }
+
+  .field:nth-of-type(4){
+    width:100%
+  }
+
+  .search{
+    margin-top:5px
+  }
+
+  .stats{
+    display:none
+  }
+
+  .mapwrap{
+    position:absolute;
+    inset:0
+  }
+
+  .live{
+    top:74px;
+    left:15px;
+    right:auto
+  }
+
+  .live .badge:nth-child(2){
+    display:none
+  }
+
+  .controls{
+    top:74px;
+    right:15px
+  }
+
+  .vehiclebar{
+    left:15px;
+    right:15px;
+    bottom:calc(58vh + 22px);
+    padding:6px;
+    overflow-x:auto;
+    scrollbar-width:none
+  }
+
+  .vehiclebar::-webkit-scrollbar{
+    display:none
+  }
+
+  .vehicle{
+    min-width:205px
+  }
+
+  .status{
+    display:none
+  }
+
+  .driverlabel{
+    display:none
+  }
+}
+
+@media(max-width:520px){
+
+  .booking{
+    max-height:56vh
+  }
+
+  .field{
+    width:100%
+  }
+
+  .vehiclebar{
+    bottom:calc(56vh + 18px)
+  }
+
+  .vehicle{
+    min-width:190px
+  }
+
+  .marker{
+    width:37px;
+    height:37px;
+    font-size:17px
+  }
+
+  .live .badge{
+    font-size:9px
+  }
+}
 </style>
 </head>
+
 <body>
+
 <div class="app">
-<header class="top"><div><span class="brand">VANTA</span><span class="sub">PREMIUM SYDNEY RIDE</span></div><nav class="nav"><b>Book a Ride</b><span>Live Map</span><span>My Bookings</span><span>Rewards</span><span>Business</span></nav><div class="user">◎ EN &nbsp; ◯</div></header>
-<div class="layout">
-<section class="left">
-<div class="eyebrow">VANTA LIVE</div><div class="title">Book your premium ride</div><div class="muted">Choose your pickup, destination and vehicle. The live Sydney map shows nearby VANTA chauffeurs.</div>
-<div class="tabs"><button class="active">One way</button><button>Return</button><button>Hourly</button></div>
-<div class="field"><label>Pickup location</label><div><span class="dot"></span>Sydney CBD, NSW</div></div>
-<div class="field"><label>Destination</label><div><span class="dot red"></span>Bondi Beach, NSW</div></div>
-<div class="field"><label>Date & time</label><div>Today &nbsp; · &nbsp; 18:30</div></div>
-<button class="search" onclick="flash()">See prices & choose vehicle →</button>
-<div class="stats"><div class="stat"><b>7.8 km</b><span>ESTIMATED DISTANCE</span></div><div class="stat"><b>18 min</b><span>ESTIMATED DRIVE</span></div></div>
-<div class="vehicle"><h3>AVAILABLE NOW</h3>
-<div class="v selected"><div class="vpic">🚘</div><div><b>Tesla Model Y</b><small>Premium Electric · 1–4 · ★ 4.9</small></div><div class="price">$68</div></div>
-<div class="v"><div class="vpic">🚐</div><div><b>Mercedes V-Class</b><small>Executive · 1–7 · ★ 4.9</small></div><div class="price">$98</div></div>
-<div class="v"><div class="vpic">🚗</div><div><b>Mercedes Maybach</b><small>Ultimate Luxury · 1–3 · ★ 5.0</small></div><div class="price">$145</div></div>
-</div>
-</section>
+
+<header class="top">
+
+  <div>
+    <span class="brand">VANTA</span>
+    <span class="sub">PREMIUM SYDNEY RIDE</span>
+  </div>
+
+  <nav class="nav">
+    <b>Book a Ride</b>
+    <span>Live Map</span>
+    <span>My Bookings</span>
+    <span>Rewards</span>
+    <span>Business</span>
+  </nav>
+
+  <div class="user">◎ EN &nbsp; ◯</div>
+
+</header>
+
+<!-- =========================
+     IMMERSIVE MAP
+========================= -->
+
 <section class="mapwrap">
-<div class="map"><iframe title="Interactive Sydney OpenStreetMap" src="https://www.openstreetmap.org/export/embed.html?bbox=151.15%2C-33.94%2C151.31%2C-33.80&layer=mapnik"></iframe></div>
-<div class="overlay live"><div class="badge"><span class="green">LIVE</span> <b>24</b> drivers nearby</div><div class="badge">Sydney · Real map</div></div>
-<div class="overlay controls"><button onclick="zoomIn()">＋</button><button onclick="zoomOut()">−</button><button onclick="locate()">⌾</button></div>
 
-<!-- Visual VANTA layer over the real map. Coordinates are positioned for the Sydney viewport. -->
-<div class="marker you" style="left:48%;top:48%">●</div>
-<div class="marker" style="left:39%;top:37%">🚘</div><div class="driverlabel" style="left:39%;top:37%">Tesla · <b>3 min</b></div>
-<div class="marker" style="left:57%;top:31%">🚐</div><div class="driverlabel" style="left:57%;top:31%">V-Class · <b>5 min</b></div>
-<div class="marker" style="left:64%;top:56%">🚗</div><div class="driverlabel" style="left:64%;top:56%">Maybach · <b>7 min</b></div>
-<div class="marker" style="left:33%;top:59%">🚘</div><div class="driverlabel" style="left:33%;top:59%">Tesla · <b>4 min</b></div>
-<div class="marker red" style="left:73%;top:62%">●</div>
-<div class="route" style="left:48%;top:48%;width:27%;transform:rotate(25deg)"></div>
+  <div class="map">
+    <iframe
+      title="Interactive Sydney OpenStreetMap"
+      src="https://www.openstreetmap.org/export/embed.html?bbox=151.15%2C-33.94%2C151.31%2C-33.80&layer=mapnik">
+    </iframe>
+  </div>
 
-<div class="overlay bottom"><div class="status" id="status"><span class="green">●</span> Live map connected · Route ready</div><div class="drivers"><span><i></i>Tesla · 3 min</span><span><i></i>V-Class · 5 min</span><span><i></i>Maybach · 7 min</span></div></div>
+  <!-- LIVE -->
+  <div class="live">
+
+    <div class="badge">
+      <span class="green">LIVE</span>
+      <b>24</b> drivers nearby
+    </div>
+
+    <div class="badge">
+      Sydney · Real map
+    </div>
+
+  </div>
+
+  <!-- CONTROLS -->
+
+  <div class="controls">
+
+    <button onclick="zoomIn()">＋</button>
+    <button onclick="zoomOut()">−</button>
+    <button onclick="locate()">⌾</button>
+
+  </div>
+
+  <!-- USER -->
+
+  <div class="marker you" style="left:48%;top:48%">
+    ●
+  </div>
+
+  <!-- DRIVER 1 -->
+
+  <div class="marker"
+       style="left:39%;top:37%">
+    🚘
+  </div>
+
+  <div class="driverlabel"
+       style="left:39%;top:37%">
+    Tesla · <b>3 min</b>
+  </div>
+
+  <!-- DRIVER 2 -->
+
+  <div class="marker"
+       style="left:57%;top:31%">
+    🚐
+  </div>
+
+  <div class="driverlabel"
+       style="left:57%;top:31%">
+    V-Class · <b>5 min</b>
+  </div>
+
+  <!-- DRIVER 3 -->
+
+  <div class="marker"
+       style="left:64%;top:56%">
+    🚗
+  </div>
+
+  <div class="driverlabel"
+       style="left:64%;top:56%">
+    Maybach · <b>7 min</b>
+  </div>
+
+  <!-- DRIVER 4 -->
+
+  <div class="marker"
+       style="left:33%;top:59%">
+    🚘
+  </div>
+
+  <div class="driverlabel"
+       style="left:33%;top:59%">
+    Tesla · <b>4 min</b>
+  </div>
+
+  <!-- DESTINATION -->
+
+  <div class="marker red"
+       style="left:73%;top:62%">
+    ●
+  </div>
+
+  <!-- ROUTE -->
+
+  <div class="route"
+       style="
+       left:48%;
+       top:48%;
+       width:27%;
+       transform:rotate(25deg)">
+  </div>
+
+  <!-- STATUS -->
+
+  <div class="status" id="status">
+    <span class="green">●</span>
+    Live map connected · Route ready
+  </div>
+
+  <!-- VEHICLES -->
+
+  <div class="vehiclebar">
+
+    <div class="vehicle selected"
+         onclick="selectVehicle(this,'Tesla Model Y')">
+
+      <div class="vpic">🚘</div>
+
+      <div>
+        <b>Tesla Model Y</b>
+        <small>Premium Electric · 1–4 · ★ 4.9</small>
+      </div>
+
+      <div class="price">$68</div>
+
+    </div>
+
+    <div class="vehicle"
+         onclick="selectVehicle(this,'Mercedes V-Class')">
+
+      <div class="vpic">🚐</div>
+
+      <div>
+        <b>Mercedes V-Class</b>
+        <small>Executive · 1–7 · ★ 4.9</small>
+      </div>
+
+      <div class="price">$98</div>
+
+    </div>
+
+    <div class="vehicle"
+         onclick="selectVehicle(this,'Mercedes Maybach')">
+
+      <div class="vpic">🚗</div>
+
+      <div>
+        <b>Mercedes Maybach</b>
+        <small>Ultimate Luxury · 1–3 · ★ 5.0</small>
+      </div>
+
+      <div class="price">$145</div>
+
+    </div>
+
+  </div>
+
 </section>
+
+<!-- =========================
+     FLOATING BOOKING PANEL
+========================= -->
+
+<section class="booking">
+
+  <div class="eyebrow">
+    VANTA LIVE
+  </div>
+
+  <div class="title">
+    Book your premium ride
+  </div>
+
+  <div class="muted">
+    Choose your pickup, destination and vehicle.
+    Your VANTA chauffeur is waiting nearby.
+  </div>
+
+  <div class="tabs">
+
+    <button class="active">
+      One way
+    </button>
+
+    <button>
+      Return
+    </button>
+
+    <button>
+      Hourly
+    </button>
+
+  </div>
+
+  <div class="field">
+
+    <label>
+      Pickup location
+    </label>
+
+    <div>
+      <span class="dot"></span>
+      Sydney CBD, NSW
+    </div>
+
+  </div>
+
+  <div class="field">
+
+    <label>
+      Destination
+    </label>
+
+    <div>
+      <span class="dot red"></span>
+      Bondi Beach, NSW
+    </div>
+
+  </div>
+
+  <div class="field">
+
+    <label>
+      Date & time
+    </label>
+
+    <div>
+      Today &nbsp; · &nbsp; 18:30
+    </div>
+
+  </div>
+
+  <button class="search"
+          onclick="flash()">
+
+    See prices & choose vehicle →
+
+  </button>
+
+  <div class="stats">
+
+    <div class="stat">
+      <b>7.8 km</b>
+      <span>ESTIMATED DISTANCE</span>
+    </div>
+
+    <div class="stat">
+      <b>18 min</b>
+      <span>ESTIMATED DRIVE</span>
+    </div>
+
+  </div>
+
+</section>
+
 </div>
-</div>
+
 <script>
-function flash(){document.getElementById('status').textContent='✓ Ride options ready · Choose your VANTA';}
-function zoomIn(){alert('Use the map controls inside the live map to zoom in.');}
-function zoomOut(){alert('Use the map controls inside the live map to zoom out.');}
-function locate(){document.getElementById('status').textContent='⌾ Location requested — allow GPS when VANTA is hosted securely.';}
+
+function flash(){
+
+  const status =
+    document.getElementById("status");
+
+  status.innerHTML =
+    '<span class="green">●</span> Ride options ready · Choose your VANTA';
+
+}
+
+function selectVehicle(element,name){
+
+  document
+    .querySelectorAll(".vehicle")
+    .forEach(v => v.classList.remove("selected"));
+
+  element.classList.add("selected");
+
+  const status =
+    document.getElementById("status");
+
+  status.innerHTML =
+    '<span class="green">●</span> '+name+' selected · Ready to book';
+
+}
+
+function zoomIn(){
+
+  const iframe =
+    document.querySelector(".map iframe");
+
+  iframe.style.transform =
+    "scale(1.15)";
+
+}
+
+function zoomOut(){
+
+  const iframe =
+    document.querySelector(".map iframe");
+
+  iframe.style.transform =
+    "scale(1)";
+
+}
+
+function locate(){
+
+  const status =
+    document.getElementById("status");
+
+  status.innerHTML =
+    '<span class="green">●</span> Location requested · Allow GPS when VANTA is secure';
+
+}
+
 </script>
-</body></html>
+
+</body>
+</html>
